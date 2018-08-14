@@ -68,6 +68,8 @@ separately:
 npm install -g ocaml-language-server
 ```
 
+You also need to globally install [Merlin](https://github.com/ocaml/merlin), used by this project under the hood. Try https://github.com/reasonml/reason-cli or, if you're using [OPAM](https://opam.ocaml.org), `opam install merlin`. If you're using Reason with BuckleScript, make sure you're on the 4.02.3 ocaml switch and do `opam install merlin.2.5.4`.
+
 ### Launching
 
 Manually launching the server should only be necessary if you are using a custom
