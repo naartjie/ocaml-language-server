@@ -3,6 +3,28 @@ import { refmt as refmtParser } from "../parser";
 import * as processes from "../processes";
 import Session from "../session";
 
+export async function ocamlformat(session: Session, doc: LSP.TextDocument, range?: LSP.Range): Promise<null | string> {
+  if (null != range) {
+    session.connection.console.warn("Selection formatting not support from ocamlformat");
+    return null;
+  }
+  const text = doc.getText();
+  const ocamlformat = new processes.Ocamlformat(session, ["-"]).process;
+  ocamlformat.stdin.write(text);
+  ocamlformat.stdin.end();
+  const otxt = await new Promise<null | string>(resolve => {
+    let buffer = "";
+    ocamlformat.stdout.on("error", (error: Error) => {
+      session.error(`Error formatting file: ${error}`);
+      resolve(null);
+    });
+    ocamlformat.stdout.on("data", (data: Buffer | string) => (buffer += data.toString()));
+    ocamlformat.stdout.on("end", () => resolve(buffer));
+  });
+  ocamlformat.unref();
+  return otxt;
+}
+
 export async function ocpIndent(session: Session, doc: LSP.TextDocument): Promise<null | string> {
   const text = doc.getText();
   const ocpIndent = new processes.OcpIndent(session, []).process;

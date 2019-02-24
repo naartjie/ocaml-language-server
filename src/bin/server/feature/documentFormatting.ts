@@ -14,7 +14,12 @@ export default function(session: Session): LSP.RequestHandler<LSP.DocumentFormat
       result.getText(),
     );
     let otxt: null | string = null;
-    if (document.languageId === "ocaml") otxt = await command.getFormatted.ocpIndent(session, document);
+    if (document.languageId === "ocaml") {
+      // FIXME: This needs a better name.
+      const tool = session.settings.reason.format.ocamltool;
+      if (tool === "ocamlformat") otxt = await command.getFormatted.ocamlformat(session, document);
+      else if (tool === "ocp-indent") otxt = await command.getFormatted.ocpIndent(session, document);
+    }
     if (document.languageId === "reason") otxt = await command.getFormatted.refmt(session, document);
     if (null == otxt || "" === otxt) return [];
     const edits: LSP.TextEdit[] = [];

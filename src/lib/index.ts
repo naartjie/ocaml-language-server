@@ -21,6 +21,7 @@ export interface ISettings {
       env: string;
       esy: string;
       ocamlfind: string;
+      ocamlformat: string;
       ocamlmerlin: string;
       ocpindent: string;
       opam: string;
@@ -30,6 +31,8 @@ export interface ISettings {
       rtop: string;
     };
     format: {
+      // FIXME: This needs a better name.
+      ocamltool: "ocamlformat" | "ocp-indent";
       width: number | null;
     };
     server: {
@@ -52,6 +55,7 @@ export namespace ISettings {
         tools: ["merlin"],
       },
       format: {
+        ocamltool: "ocamlformat",
         width: null,
       },
       path: {
@@ -59,6 +63,7 @@ export namespace ISettings {
         env: "env",
         esy: "esy",
         ocamlfind: "ocamlfind",
+        ocamlformat: "ocamlformat",
         ocamlmerlin: "ocamlmerlin",
         ocpindent: "ocp-indent",
         opam: "opam",
